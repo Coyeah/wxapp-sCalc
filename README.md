@@ -3,12 +3,12 @@
 第一次练手wxapp。简易计算器，实现简单的计算功能。
 
 问题待解决：
-
+	
 * js代码赘余
 * wxapp结构有待深入理解
 
 文档：
-![wxadoc](https://mp.weixin.qq.com/debug/wxadoc/dev/)
+[微信官方文档](https://mp.weixin.qq.com/debug/wxadoc/dev/)
 
 效果:
 
