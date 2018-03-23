@@ -1,0 +1,75 @@
+/* pages/calc/calc.wxss */
+
+.section {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.show {
+  background-color: #363636;
+  height: 19%;
+  padding: 0 3%;
+  font-size: 40rpx;
+  text-align: right;
+}
+
+text {
+  color: #f1af00;
+  line-height: 100rpx;
+  display: block;
+}
+
+.show-input {
+  color: #fff;
+  font-size: 80rpx;
+}
+
+.border {
+  height: 1%;
+  background-color: #f1af00;  
+}
+
+.keyboard {
+  margin: 0;
+  padding: 0;
+  height: 80%;
+}
+
+.row {
+  height: 20%;
+  display: flex;
+}
+
+.touch {
+  height: 100%;
+  width: 25%;
+  font-size: 40rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.touch:active {
+  color: #000;
+  background-color: #fff;
+}
+
+.twoArea {
+  width: 50%;
+}
+
+.color-orange {
+  color: #211551;
+  background-color: #f1af00;
+}
+
+.color-black {
+  color: #fff;
+  background-color: #363636;
+}
+
