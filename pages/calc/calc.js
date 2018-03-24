@@ -8,15 +8,15 @@ Page({
     idb: 'back',
     idc: 'clear',
     idt: 'toggle',
-    idd: 'divide',
+    idd: 'div',
     id7: '7',
     id8: '8',
     id9: '9',
-    idm: 'multiply',
+    idm: 'mul',
     id4: '4',
     id5: '5',
     id6: '6',
-    ids: 'subtract',
+    ids: 'sub',
     id1: '1',
     id2: '2',
     id3: '3',
@@ -26,6 +26,7 @@ Page({
     ide: 'equal',
     waitData: '0',
     screenData: '0',
+    oper: ["+", "-", "×", "÷"],
     arr: [],
     logs: [],
   },
@@ -36,162 +37,89 @@ Page({
   clickBtn: function (event) {
     var id = event.target.id;
     var wait = this.data.waitData;
-    var temp = this.data.screenData;
-    switch (id) {
-      case this.data.idb: {
-        if (temp == '0' || temp.length == 1) {
-          temp = '0';
-        } else {
-          var tmp = '';
-          for (var i = 0; i < temp.length - 1; i++) {
-            tmp += temp.charAt(i);
-          }
-          temp = tmp;
-        }
-        this.setData({ "screenData": temp });
-        break;
-      }
-      case this.data.idc: {
+    var main = this.data.screenData;
+    if (isNaN(id)) {
+      if (id == this.data.idc) {
         this.data.arr.splice(0, this.data.arr.length);
         this.data.logs.splice(0, this.data.logs.length);
         this.setData({ "screenData": "0", "waitData": "0" });
-        break;
-      }
-      case this.data.idt: {
-        break;
-      }
-      case this.data.idd: {
-        var symbol = '/';
-        if (temp == '0') {
-          if (wait != '0') {
-            wait = wait.substring(0, wait.length - 1) + symbol;
-            this.data.logs.pop();
-            this.data.logs.push(symbol);
+      } else if (id == this.data.idb) {
+        if (main != '0') {
+          main = main.substring(0, main.length - 1);
+          if (main == '' || main == '-') {
+            main = "0";
           }
+          this.setData({ "screenData": main });
+        }
+      } else if (id == this.data.idt) {
+        if (main.charAt(0) == '-') {
+          main = main.substring(1);
         } else {
-          this.data.arr.push(temp);
-          this.data.logs.push(symbol);
-          if (wait == '0') {
-            wait = temp + symbol;
-          } else {
-            wait = wait + temp + symbol;
-          }
-          temp = '0';
+          main = '-' + main;
         }
-        this.setData({ "screenData": temp, "waitData": wait });
-        break;
-      }
-      case this.data.idm: {
-        var symbol = '*';
-        if (temp == '0') {
-          if (wait != '0') {
-            wait = wait.substring(0, wait.length - 1) + symbol;
-            this.data.logs.pop();
-            this.data.logs.push(symbol);
-          }
-        } else {
-          this.data.arr.push(temp);
-          this.data.logs.push(symbol);
-          if (wait == '0') {
-            wait = temp + symbol;
-          } else {
-            wait = wait + temp + symbol;
-          }
-          temp = '0';
+        this.setData({ "screenData": main });
+      } else if (id == this.data.idp) {
+        if (main.indexOf('.') < 0) {
+          this.setData({ "screenData": main + "." });
         }
-        this.setData({ "screenData": temp, "waitData": wait });
-        break;
-      }
-      case this.data.ids: {
-        var symbol = '-';
-        if (temp == '0') {
-          if (wait != '0') {
-            wait = wait.substring(0, wait.length - 1) + symbol;
-            this.data.logs.pop();
-            this.data.logs.push(symbol);
-          }
-        } else {
-          this.data.arr.push(temp);
-          this.data.logs.push(symbol);
-          if (wait == '0') {
-            wait = temp + symbol;
-          } else {
-            wait = wait + temp + symbol;
-          }
-          temp = '0';
-        }
-        this.setData({ "screenData": temp, "waitData": wait });
-        break;
-      }
-      case this.data.ida: {
-        var symbol = '+';
-        if (temp == '0') {
-          if (wait != '0') {
-            wait = wait.substring(0, wait.length - 1) + symbol;
-            this.data.logs.pop();
-            this.data.logs.push(symbol);
-          }
-        } else {
-          this.data.arr.push(temp);
-          this.data.logs.push(symbol);
-          if (wait == '0') {
-            wait = temp + symbol;
-          } else {
-            wait = wait + temp + symbol;
-          }
-          temp = '0';
-        }
-        this.setData({ "screenData": temp, "waitData": wait });
-        break;
-      }
-      case this.data.idp: {
-        for (var i = 0; i < temp.length; i++) {
-          if (temp.charAt(i) == '.') {
-            break;
-          }
-          if (i == temp.length - 1) {
-            temp += '.';
-          }
-        }
-        this.setData({ "screenData": temp });
-        break;
-      }
-      case this.data.ide: {
-        if (temp != '0') {
-          this.data.arr.push(temp);
-        }
+      } else if (id == this.data.ide) {
+        this.data.arr.push(main);
         var sum = 0;
         for (var i = 0; i < this.data.arr.length; i++) {
-          var target = parseFloat(this.data.arr[i]);
           if (i == 0) {
-            sum = target;
+            sum = parseFloat(this.data.arr[0]);
           } else {
-            var symbol = this.data.logs[i - 1];
-            if (symbol == '+') {
-              sum = sum + target;
-            } else if (symbol == '-') {
-              sum = sum - target;
-            } else if (symbol == '*') {
-              sum = sum * target;
-            } else if (symbol == '/') {
-              sum = sum / target;
+            if (this.data.logs[i - 1] == this.data.oper[0]) {
+              sum = sum + parseFloat(this.data.arr[i]);
+            } else if (this.data.logs[i - 1] == this.data.oper[1]) {
+              sum = sum - parseFloat(this.data.arr[i]);
+            } else if (this.data.logs[i - 1] == this.data.oper[2]) {
+              sum = sum * parseFloat(this.data.arr[i]);
+            } else if (this.data.logs[i - 1] == this.data.oper[3]) {
+              sum = sum / parseFloat(this.data.arr[i]);
             }
           }
         }
-        var total = sum + '';
-        this.setData({ "screenData": total, "waitData": "0" });
         this.data.arr.splice(0, this.data.arr.length);
         this.data.logs.splice(0, this.data.logs.length);
-        break;
-      }
-      default: {
-        temp += id;
-        if (temp.charAt(0) == '0' && temp.charAt(1) != '.') {
-          temp = temp.substring(1);
+        this.setData({ "screenData": sum + "", "waitData": "0" });
+      } else {
+        var oper = '';
+        if (id == this.data.idd) {
+          oper = this.data.oper[3];
+        } else if (id == this.data.idm) {
+          oper = this.data.oper[2];
+        } else if (id == this.data.ids) {
+          oper = this.data.oper[1];
+        } else if (id == this.data.ida) {
+          oper = this.data.oper[0];
         }
-        this.setData({ "screenData": temp });
-        break;
+        if (main == '0' || main == '-0') {
+          if (wait != '0') {
+            wait = wait.substring(0, wait.length - 1) + oper;
+            this.data.logs.pop();
+            this.data.logs.push(oper);
+          }
+        } else {
+          if (wait == '0') {
+            wait = main + oper;
+          } else {
+            wait = wait + main + oper;
+          }
+          this.data.arr.push(main);
+          this.data.logs.push(oper);
+        }
+        this.setData({ "screenData": "0", "waitData": wait });
       }
+    } else {
+      if (main == '0') {
+        main = id;
+      } else if (main.charAt(0) == '-' && main.charAt(1) == '0') {
+        main = '-' + main.substring(2) + id;;
+      } else {
+        main = main + id;
+      }
+      this.setData({ "screenData": main });
     }
   },
 
